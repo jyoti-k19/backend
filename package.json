@@ -1,0 +1,15 @@
+{
+  "name": "mern",
+  "version": "1.0.0",
+  "description": "new project 07/02",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "js",
+    "backend"
+  ],
+  "author": "jyoti k",
+  "license": "ISC"
+}
