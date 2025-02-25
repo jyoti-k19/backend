@@ -9,10 +9,10 @@ app.use(cors( {
       credentials: true
 }))
 
-app.use(express.jsom({limit: "16kb"}))
+app.use(express.json({limit: "16kb"}))
 app.use(express.urlencoded({extended: true ,limit : "16kb"}))
 app.use(express.static("public"))
-app.use(cookiePraiser())
+app.use(cookieParser())
 
 
 //import routes
@@ -23,4 +23,4 @@ import userRouter from './routes/user.routes.js'
 //routes declaration using middlerware we cant do get directly like we did previously
 app.use("/api/v1/user" , userRouter)
 
-export { app }
+export default app;
