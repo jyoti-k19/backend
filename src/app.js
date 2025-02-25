@@ -15,4 +15,12 @@ app.use(express.static("public"))
 app.use(cookiePraiser())
 
 
+//import routes
+
+import userRouter from './routes/user.routes.js'
+
+
+//routes declaration using middlerware we cant do get directly like we did previously
+app.use("/api/v1/user" , userRouter)
+
 export { app }
