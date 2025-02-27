@@ -18,11 +18,11 @@ const  registerUser = asyncHandler ( async (req , res) => {
 
 //      console.log("Received Files:", req.files);
 
-     const {fullName , email , username , password} = req.body
+     const {fullname , email , username , password} = req.body
      console.log("email : " , email );
 
      if (
-           [fullName, email , username, password].some((feild) => feild?.trim() === "")
+           [fullname, email , username, password].some((feild) => feild?.trim() === "")
      ) {
       throw new ApiError(400, " All feilds are required")
      }
@@ -61,7 +61,7 @@ const  registerUser = asyncHandler ( async (req , res) => {
       // }
 
       const user = await User.create ({
-            fullName,
+            fullname,
             avatar : avatar?.url || "", 
             coverImage : coverImage?.url || "" ,
             email,
@@ -83,6 +83,17 @@ const  registerUser = asyncHandler ( async (req , res) => {
 
 } );
 
+const loginUser = asyncHandler(async (req , res) => {
+      // req body =>data
+      //username or email
+      //find the user
+      //password check
+      //access and refresh token
+      //send secure cookies
+
+
+      const {email, username , password} = req.body
+})
 
 export {
       registerUser,
