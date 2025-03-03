@@ -4,6 +4,21 @@ import {User} from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 
+const generateAccessAndRefeshTokens = async(userId)=>{
+      try {
+            const user = await User.findById(userId)
+            const accessToken = user.generateAccessToken()
+            const refreshToken = user.generateRefreshToken()
+
+            user.refreshToken = refreshToken //storing user data in database
+            await user.save({validateBeforeSave: false})
+
+            return { accessToken , refreshToken}
+
+      } catch (error) {
+            throw new ApiError(500 , "Something went wrong while genrating refresh and access tokens")
+      }
+}
 
 const  registerUser = asyncHandler ( async (req , res) => {
      //user data from frontend
@@ -93,8 +108,51 @@ const loginUser = asyncHandler(async (req , res) => {
 
 
       const {email, username , password} = req.body
+
+      if(!username || !email) {
+            throw new ApiError(400 , "username or email is required")
+      }
+
+      const user = await user.findOne({ //mongoose operations
+            $or : [{username} , {email}]
+      })
+
+      if(!user) {
+            throw new ApiError(404, "user doesn't exist")
+      }
+
+      const isPasswordValid = await user.isPasswordCorrect (password)
+      if(!isPasswordValid) {
+            throw new ApiError(404, "Invalid user credentials")
+      }
+
+      const {accessToken , refreshToken} = await generateAccessAndRefeshTokens(user._id)
+
+      const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
+
+      const options = {
+            httpOnly : true, //only server can access not frontend
+            secure:  true
+      }
+
+      return res
+      .status(200)
+      .cookie("accessToken" , accessToken , options)
+      .cookie("refreshToken", refreshToken , options)
+      .json(
+            200,
+            {
+                  user: loggedInUser , accessToken , refreshToken //when user triying to save password in their loccal storage
+            },
+            "User logged In Successfully"
+      )
+})
+
+const logoutUser = asyncHandler(async(req,res)=> {
+      
 })
 
 export {
       registerUser,
+      loginUser
 }
