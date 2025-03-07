@@ -19,8 +19,8 @@ export const verifyJWT = asyncHandler(async(req, res, next ) => {
       }
  
       req.user = user ;
-      next()
-    } catch (error) {
+      next() //helps to know user is authenticated or not at multiple places
+    } catch (error) {               //if error is there decode the message else give our own msg
           throw new ApiError(401, error?.message || "Invalid access token")
     }
 
