@@ -316,5 +316,5 @@ export {
       refreshAccessToken,
       getCurrentUser,
       updateAccountDetails,
-      updateUserCoverI
+      updateUserCoverImage
 }
